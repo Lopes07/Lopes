@@ -14,15 +14,10 @@ int main(){
         printf("Declare o numero que deseja armazenar: ");
         scanf("%i", &vetor[i]);
 
-        /*printf("Digite 1 caso queira adicionar mais um numero\n");
-        scanf("%i", &opcao);*/
-        
         if(vetor[i] >= 0){
             i++;
             vetor = (int *)realloc(vetor, (i+1) * sizeof(int));
         }
-        
-
         
     }while(vetor[i] >= 0);
 
