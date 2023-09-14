@@ -12,6 +12,8 @@ sem_t sem_medicos;
 sem_t sem_nebulizadores;
 sem_t sem_sala_espera;
 pthread_mutex_t mutex; 
+pthread_mutex_t mutex_pacientes_atendidos = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t cond_pacientes_atendidos = PTHREAD_COND_INITIALIZER;
 
 int pacientes_atendidos = 0;
 int pacientes_hospital = 0;
@@ -114,9 +116,11 @@ int main() {
     }
 
     // Aguarde todos os pacientes serem atendidos.
+    pthread_mutex_lock(&mutex_pacientes_atendidos);
     while (pacientes_atendidos < MAX_PACIENTES) {
-        // Aguarde
+        pthread_cond_wait(&cond_pacientes_atendidos, &mutex_pacientes_atendidos);
     }
+    pthread_mutex_unlock(&mutex_pacientes_atendidos);
 
     // Encerre os threads de médicos.
     for (int i = 0; i < NUM_MEDICOS; i++) {
